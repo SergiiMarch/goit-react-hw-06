@@ -4,15 +4,17 @@ import storage from "redux-persist/lib/storage";
 import contactsReducer from "./contactsSlice";
 import filtersReducer from "./filtersSlice";
 
-// Конфігурація для збереження контактів
+// Конфігурація для збереження стану контактів
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["contacts"], // Переконайтесь, що ви зберігаєте тільки потрібні частини стану
+  whitelist: ["contacts"], // Вказуємо, що ми хочемо зберігати тільки contacts
 };
 
+// Створюємо персистований ред'юсер для контактів
 const persistedContactsReducer = persistReducer(persistConfig, contactsReducer);
 
+// Створюємо Redux store з персистованими контактами та фільтрами
 const store = configureStore({
   reducer: {
     contacts: persistedContactsReducer,
@@ -20,9 +22,9 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false, // Ігнорування перевірок серіалізації для `redux-persist`
+      serializableCheck: false, // Вимикаємо перевірки серіалізації для redux-persist
     }),
 });
 
 export const persistor = persistStore(store);
-export default store;
+export default store; // Експортуємо store за замовчуванням
